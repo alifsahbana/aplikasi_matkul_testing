@@ -1,0 +1,6 @@
+kode_umkm,nama_umkm,nama_pemilik,kategori,kecamatan,desa,alamat,latitude,longitude,luas_lahan_ha,kapasitas_produksi,satuan_produksi,produksi_aktual,periode_produksi,jumlah_tenaga_kerja,nilai_transaksi,status_usaha,kontak
+DEMO-PMK-101,Sentra Rajangan Tembakau Barurambat,Ahmad Subandi,Pengeringan & Pengolahan Daun,Pamekasan,Barurambat Timur,Jl. Veteran No. 12,-7.1590000,103.4850000,0.45,8000,Kg,7200,Musim 2026,14,450000000,aktif,081234567891
+DEMO-KDR-102,Kelompok Tani Tembakau Puncak Kadur,K.H. Zainuddin,Petani & Pembibitan Tembakau,Kadur,Kadur Timur,Dusun Puncak RT 02/01,-7.0940000,103.5510000,3.80,7600,Kg,7100,Musim 2026,22,530000000,aktif,081234567892
+DEMO-PSN-103,PR. Tembakau Pantura Segar (SKT),Mahfud Efendi,Produsen Sigaret Kretek Tangan (SKT),Pasean,Pasean Pesisir,Jl. Pelabuhan Niaga No. 8,-6.9140000,103.5430000,0.30,500000,Batang,440000,Bulanan,20,350000000,aktif,081234567893
+DEMO-TLN-104,Gudang Daun Matang Tlanakan,H. Syakur,Pengepul & Perdagangan Rajangan,Tlanakan,Branta Lor,Jl. Raya Pesisir No. 14,-7.2190000,103.4760000,0.60,12000,Kg,10800,Musim 2026,18,650000000,aktif,081234567894
+DEMO-WRU-105,Ekstrak Cair Tembakau Organik Madura,Dr. Sukarman,Produk Olahan & Turunan Tembakau,Waru,Waru Barat,Dusun Karang Panasan,-6.9940000,103.5210000,0.20,2500,Liter,2100,Bulanan,9,140000000,aktif,081234567895
