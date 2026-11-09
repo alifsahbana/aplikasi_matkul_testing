@@ -3,7 +3,10 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "test": "php artisan test",
+        "test:e2e": "playwright test",
+        "test:api": "newman run tests/postman/WebGIS_Pamekasan.postman_collection.json --ignore-redirects"
     },
     "devDependencies": {
         "@playwright/test": "^1.64.1",

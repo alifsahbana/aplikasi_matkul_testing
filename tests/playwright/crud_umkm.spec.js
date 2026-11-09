@@ -31,7 +31,7 @@ test.describe('Automated E2E: Operasi CRUD Data UMKM (Admin)', () => {
     await page.fill('#latInput', '-6.2000000'); // Jakarta
     await page.fill('#lngInput', '106.8166660');
 
-    await page.click('button[type="submit"]');
+    await page.click('#umkmForm button[type="submit"]');
 
     // Pastikan muncul notifikasi error validasi
     await expect(page.locator('body')).toContainText('Titik lintang harus berada dalam batas geografis Kabupaten Pamekasan');

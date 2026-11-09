@@ -6,7 +6,7 @@ test.describe('Automated E2E: Eksplorasi Spasial WebGIS Leaflet', () => {
     
     // Pastikan kontainer peta Leaflet aktif
     await expect(page.locator('#map')).toBeVisible();
-    await expect(page.locator('.leaflet-tile-pane')).toBeVisible();
+    await expect(page.locator('.leaflet-container')).toBeVisible();
 
     // Verifikasi kontrol filter
     await expect(page.locator('text=Eksplorasi Spasial GIS')).toBeVisible();

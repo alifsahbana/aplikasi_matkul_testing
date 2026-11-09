@@ -78,10 +78,11 @@
     </header>
 
     <!-- Konten Utama -->
-    <main class="flex-grow">
+    <main class="{{ request()->routeIs('map.index') ? 'flex-grow flex flex-col h-[calc(100vh-4rem)] overflow-hidden' : 'flex-grow' }}">
         @yield('content')
     </main>
 
+    @if(!request()->routeIs('map.index'))
     <!-- Footer Akademik -->
     <footer class="bg-forest-950 text-slate-300 border-t border-forest-900 text-sm mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -126,6 +127,7 @@
             </div>
         </div>
     </footer>
+    @endif
 
     @stack('scripts')
 </body>

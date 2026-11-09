@@ -21,6 +21,10 @@
 | GIS-05 | Pencarian Lokasi UMKM | Pengunjung, Admin | Kotak pencarian realtime dengan highlight marker otomatis dan fly-to koordinat terpilih. |
 | GIS-06 | Layer Batas Wilayah Kecamatan | Pengunjung, Admin | Overlay poligon batas 13 kecamatan dari data GeoJSON dengan tooltip statistik kecamatan. |
 | GIS-07 | Legenda Peta Dinamis | Pengunjung, Admin | Indikator visual warna marker dan simbol kategori rantai pasok tembakau. |
+| GIS-08 | Citra Satelit Basemap Switcher | Pengunjung, Admin | Fitur peralihan tampilan peta antara Peta Jalan OpenStreetMap dan Citra Satelit Esri World Imagery resolusi tinggi. |
+| GIS-09 | Navigasi Google Maps & Direct WhatsApp | Pengunjung, Admin | Integrasi tombol rute peta via Google Maps Directions API dan direct message WhatsApp langsung ke nomor pemilik UMKM. |
+| GIS-10 | Peta Tematik Kloropet Kecamatan | Pengunjung, Admin | Pewarnaan gradasi intensitas poligon kecamatan berbasis total volume produksi tembakau, dilengkapi tooltip statistik dinamis dan filter instan saat poligon diklik. |
+| GIS-11 | Sensor Geolokasi GPS "Lokasi Saya" | Pengunjung, Admin | Fitur pendeteksi koordinat terkini pengguna menggunakan Geolocation API browser untuk navigasi jarak dekat. |
 
 ---
 
@@ -58,3 +62,4 @@
 | IMP-03 | Eksekusi Impor Transaksional | Admin | Proses impor dalam `DB::transaction`; rollback otomatis jika terdapat fatal error. |
 | IMP-04 | Laporan Hasil Impor & Defect Log | Admin | Menampilkan rincian baris sukses, baris duplikat yang dilewati, dan baris gagal beserta alasan error per baris. |
 | EXP-01 | Ekspor Laporan CSV/Excel | Admin, Pengunjung | Ekspor data tersaring (per kecamatan/kategori) dengan masking data privat pemilik jika diakses publik. |
+| EXP-02 | Cetak & Simpan Laporan PDF | Admin, Pengunjung | Penyediaan fungsi cetak ringkas berformat rapi (*print-friendly document*) untuk laporan eksekutif dan lembar profil UMKM. |

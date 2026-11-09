@@ -83,6 +83,7 @@ class MapController extends Controller
             'business_status' => $umkm->business_status,
             'data_source' => $umkm->data_source,
             'contact_phone' => $umkm->contact_phone,
+            'is_verified' => (bool) $umkm->is_verified,
             'updated_at' => $umkm->updated_at->format('d M Y'),
         ]);
     }

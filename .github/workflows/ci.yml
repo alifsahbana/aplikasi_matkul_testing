@@ -1,0 +1,163 @@
+name: WebGIS SQA CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, 'feat/**', 'fix/**' ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ========================================================
+  # JOB 1: CONTINUOUS INTEGRATION (CI) - AUTOMATED TESTING
+  # ========================================================
+  test-and-verify:
+    name: Automated SQA Verification (ISO/IEC/IEEE 29119)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP Environment
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, sqlite, pdo_sqlite, bcmath, fileinfo
+          coverage: none
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Setup Environment Variables (.env)
+        run: |
+          cp .env.example .env
+          sed -i 's/DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i 's|DB_DATABASE=.*|DB_DATABASE=database/database.sqlite|' .env
+
+      - name: Install Composer Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Generate Laravel Application Key
+        run: php artisan key:generate
+
+      - name: Create SQLite Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Run Database Migrations & Seeders
+        run: php artisan migrate --seed --force
+
+      - name: Install NPM Dependencies & Build Production Assets
+        run: |
+          npm ci
+          npm run build
+
+      - name: 1. Execute PHPUnit Unit & Feature Tests
+        run: php artisan test --colors=always
+
+      - name: Start Background Laravel Server for API & E2E Testing
+        run: |
+          php artisan serve --port=8000 &
+          sleep 3
+
+      - name: 2. Execute Postman / Newman REST API Test Collection
+        run: npx --yes newman run tests/postman/WebGIS_Pamekasan.postman_collection.json --ignore-redirects
+
+      - name: 3. Install Playwright Browsers (Ubuntu CI)
+        run: npx playwright install --with-deps chromium
+
+      - name: 4. Execute Playwright End-to-End Automated Tests
+        run: npx playwright test --project=chromium
+        env:
+          APP_URL: http://127.0.0.1:8000
+          CI: true
+
+      - name: Upload Playwright Test Report Artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # ========================================================
+  # JOB 2: CONTINUOUS DEPLOYMENT (CD) - DOCKER & RELEASE
+  # ========================================================
+  deploy-production:
+    name: Continuous Deployment & Containerization (Docker)
+    runs-on: ubuntu-latest
+    needs: test-and-verify
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker Metadata (Tags & Labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=short
+
+      - name: Build and Push Production Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Package Production Artifacts
+        run: |
+          mkdir -p release
+          tar --exclude='.git' --exclude='node_modules' --exclude='tests' -czf release/webgis-pamekasan-build.tar.gz .
+
+      - name: Upload Deployment Release Package
+        uses: actions/upload-artifact@v4
+        with:
+          name: webgis-production-release
+          path: release/webgis-pamekasan-build.tar.gz
+          retention-days: 14
+
+      # Opsional: Jika mahasiswa / dosen menghubungkan VPS via SSH Secrets
+      - name: Deploy to VPS Server via SSH (Optional / Automated)
+        if: "${{ env.SSH_HOST != '' }}"
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+        run: |
+          echo "SSH host terdeteksi, mengeksekusi container update di server VPS..."
+          # docker compose pull && docker compose up -d

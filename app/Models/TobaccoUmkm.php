@@ -133,6 +133,7 @@ class TobaccoUmkm extends Model
                 'business_status' => $this->business_status,
                 'data_source' => $this->data_source,
                 'contact_phone' => $this->contact_phone,
+                'is_verified' => (bool) $this->is_verified,
             ],
         ];
     }

@@ -20,7 +20,7 @@ test.describe('Automated E2E: Autentikasi & Keamanan Sesi', () => {
 
     // Pastikan terarah ke dashboard admin
     await expect(page).toHaveURL(/.*admin/);
-    await expect(page.locator('h1')).toContainText('Panel Kontrol Administrator');
+    await expect(page.locator('h1')).toContainText('Ringkasan Eksekutif & Manajemen WebGIS');
     await expect(page.locator('body')).toContainText('Halo, Administrator WebGIS Pamekasan!');
   });
 
